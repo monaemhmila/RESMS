@@ -115,15 +115,17 @@ function SignIn() {
           <Heading color={textColor} fontSize="36px" mb="10px">
             Sign In
           </Heading>
-          <Text
-            mb="36px"
-            ms="4px"
-            color={textColorSecondary}
-            fontWeight="400"
-            fontSize="md"
-          >
-            Enter your email and password to sign in!
-          </Text>
+          <FormLabel
+  display="flex"
+  ms="4px"
+  fontSize="sm"
+  fontWeight="500"
+  color={textColor}
+  mb="8px"
+>
+  <span style={{ color: brandStars }}></span>
+</FormLabel>
+
         </Box>
         <Flex
           zIndex="2"

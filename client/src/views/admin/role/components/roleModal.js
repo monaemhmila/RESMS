@@ -259,7 +259,7 @@ function RoleModal(props) {
             </Button>
             <Button
               size="sm"
-              onClick={() => setRoleModal(false)}
+              onClick={() => setRoleModal(true)}
               variant="outline"
               colorScheme="red"
               sx={{

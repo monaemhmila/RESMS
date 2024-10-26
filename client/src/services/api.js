@@ -90,7 +90,6 @@ export const getApi = async (path, id) => {
             return result
         }
     } catch (e) {
-        console.error(e)
         return e
     }
 }

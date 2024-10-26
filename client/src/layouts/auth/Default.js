@@ -29,37 +29,32 @@ function AuthIllustration(props) {
         direction='column'>
         {children}
         <Box
-          display={{ base: "none", md: "flex" }}
-          h='100%'
-          minH='100vh'
-          w={{ lg: "50vw", "2xl": "44vw" }}
-          borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}
-          justifyContent='center'
-          position='absolute'
-          flexDirection={'column'}
-          alignItems={'center'}
-          // bg={'black'}
-          overflow={'hidden'}
-          right='0px'>
-          <Link to="https://JEMSITinfotech.com/" target="_blank" style={{ height: '50%', width: '50%' }} >
-            <Flex
-              bg={`url(${illustrationBackground})`}
-              justify='center'
-              align='center'
-              w='100%'
-              h='100%'
-              bgSize='cover'
-              bgPosition='50%'
-            />
-          </Link>
-          {/* <Box
-            border={'1px solid'}
-            p={4}
-            borderRadius={10}
-          >
-            Hi
-          </Box> */}
-        </Box>
+  display={{ base: "none", md: "flex" }}
+  h='100%'
+  minH='100vh'
+  w={{ lg: "50vw", "2xl": "44vw" }}
+  borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}
+  justifyContent='center'
+  position='absolute'
+  flexDirection={'column'}
+  alignItems={'center'}
+  right='0px'
+>
+  <Link to="https://www.jemsit.com/#/home" target="_blank" style={{ height: '100%', width: '100%' }} >
+    <Flex
+      bg={`url(${illustrationBackground})`}
+      justify='center'
+      align='center'
+      w='100%'
+      h='100%'
+      bgSize='contain' // Gardez l'image entière
+      bgPosition='center' // Centrer l'image
+      bgRepeat='no-repeat' // Évitez la répétition
+      style={{ maxWidth: '60%', maxHeight: '60%', marginTop: '20%',}} // Taille plus petite et décalage vers la gauche
+    />
+  </Link>
+</Box>
+
         <Footer />
       </Flex>
       {/* CHANGE THEME COLOR BUTTON LIGHT-DARK */}

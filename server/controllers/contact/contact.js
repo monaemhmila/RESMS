@@ -59,7 +59,6 @@ const addPropertyInterest = async (req, res) => {
         res.status(400).json({ error: 'Failed to create Contact' });
     }
 }
-
 const edit = async (req, res) => {
     try {
         let result = await Contact.updateOne(

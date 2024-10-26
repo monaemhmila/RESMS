@@ -152,7 +152,7 @@ export default function User(props) {
     routes.push(...activeRoutes)
 
     const getActiveRoute = (routes) => {
-        let activeRoute = 'JEMSIT';
+        let activeRoute = 'Jemsit';
         for (let i = 0; i < routes.length; i++) {
             if (routes[i].collapse) {
                 let collapseActiveRoute = getActiveRoute(routes[i].items);
@@ -337,3 +337,4 @@ export default function User(props) {
         </Box>
     );
 }
+

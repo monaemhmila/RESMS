@@ -32,7 +32,7 @@ const AccountModel = (props) => {
             onClose()
         }
         catch (e) {
-            console.log(e)
+           
         }
         finally {
             setIsLoding(false)

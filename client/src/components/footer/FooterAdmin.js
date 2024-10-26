@@ -42,9 +42,9 @@ export default function Footer() {
             fontWeight='500'
             color={textColor}
             target="_blank"
-            href='https://JEMSITinfotech.com/'> JEMSIT Infotech.</Link> Need help, facing issues, or looking for a new feature? Contact us for paid support and services at <Link href='mailto:alternatecrm@gmail.com' fontWeight='500'
+            href='https://www.jemsit.com/#/home'> Jemsit.</Link> Need help, facing issues, or looking for a new feature? Contact us for paid support and services at <Link href='mailto:alternatecrm@gmail.com' fontWeight='500'
               color={textColor}
-              target="_blank">alternatecrm@gmail.com</Link>
+              target="_blank">jemsit.contact@gmail.com</Link>
         </Text>
       </Text>
       {/* <List display='flex'>
@@ -56,7 +56,7 @@ export default function Footer() {
           <Link
             fontWeight='500'
             color={textColor}
-            href='https://JEMSITinfotech.com/'>
+            href='https://prolinkinfotech.com/'>
             Support
           </Link>
         </ListItem>

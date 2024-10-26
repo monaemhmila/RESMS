@@ -248,12 +248,16 @@ const leadFields = [
         "isTableField": true,
         "options": [
             {
-                "name": "Pending",
+                "name": "active",
+                "value": "active",
+            },
+            {
+                "name": "pending",
                 "value": "pending",
             },
             {
-                "name": "Followed Up",
-                "value": "followedUp",
+                "name": "sold",
+                "value": "sold",
             }
         ],
         "validation": [],
@@ -355,4 +359,6 @@ const leadFields = [
         "validation": [],
     },
 ];
+
+// Export the leadFields object for use in other modules
 exports.leadFields = leadFields;

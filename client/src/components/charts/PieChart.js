@@ -80,7 +80,7 @@ const ApexChart = (props) => {
 
   return (
     <div>
-      <ReactApexChart key={leadData?.length} options={options} series={scaledSeries} type="radialBar" height={320} />
+      <ReactApexChart key={leadData?.length} options={options} series={scaledSeries} type="radialBar" height={280} />
     </div>
   );
 };

@@ -11,7 +11,7 @@ const leadSchema = new mongoose.Schema({
      leadEmail: String,
      leadPhoneNumber: String,
      leadAddress: String,
-     // Lead Source and Details:
+     // Lead Information:
      leadSource: String,
      leadStatus: String,
      leadSourceDetails: String,

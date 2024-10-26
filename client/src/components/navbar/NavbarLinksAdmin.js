@@ -222,7 +222,7 @@ export default function HeaderLinks(props) {
 					<Avatar
 						_hover={{ cursor: "pointer" }}
 						color="white"
-						name={user || "JEMSIT Infotech"}
+						name={user || "Jemsit"}
 						bg="#11047A"
 						size="sm"
 						w="40px"

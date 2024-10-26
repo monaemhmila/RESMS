@@ -29,7 +29,7 @@
     "framer-motion": "^4.1.17",
     "fullcalendar": "^6.1.8",
     "html2pdf": "^0.0.11",
-    "html2pdf.js": "^0.10.2",
+    "html2pdf.js": "^0.10.1",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "papaparse": "^5.4.1",
@@ -57,7 +57,7 @@
     "yup": "^1.2.0"
   },
   "scripts": {
-    "start": "cross-env PORT=3213 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -88,7 +88,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3"
   }
 }

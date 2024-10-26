@@ -63,7 +63,7 @@ const Communication = React.lazy(() => import("views/admin/communication"));
 const Task = React.lazy(() => import("views/admin/task"));
 const TaskView = React.lazy(() => import("views/admin/task/components/taskView"));
 const Calender = React.lazy(() => import("views/admin/calender"));
-const Payments = React.lazy(() => import("views/admin/payments"));
+//const Payments = React.lazy(() => import("views/admin/payments"));
 const Role = React.lazy(() => import("views/admin/role"));
 
 const Document = React.lazy(() => import("views/admin/document"));
@@ -393,13 +393,13 @@ const routes = [
     component: Calender,
   },
   // ------------- Payments Routes ------------------------
-  {
+  /*{
     name: "Payments",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/payments",
     icon: <Icon as={FaRupeeSign} width='20px' height='20px' color='inherit' />,
     component: Payments,
-  },
+  },*/
 
   // -----------------------------Admin setting-------------------------------------
   {

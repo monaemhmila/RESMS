@@ -147,7 +147,7 @@ export default function Dashboard(props) {
 	};
 
 	const getActiveRoute = (routes) => {
-		let activeRoute = 'JEMSIT';
+		let activeRoute = 'Jemsit';
 		for (let i = 0; i < routes.length; i++) {
 			if (routes[i].collapse) {
 				let collapseActiveRoute = getActiveRoute(routes[i].items);

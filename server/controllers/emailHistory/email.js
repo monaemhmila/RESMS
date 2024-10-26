@@ -29,7 +29,7 @@ const add = async (req, res) => {
 
         const result = new Email(email);
         await result.save();
-        // sendEmail(email.recipient, email.subject, email.message, email.html)
+        sendEmail(email.recipient, email.subject, email.message, email.html)
         res.status(200).json({ result });
     } catch (err) {
         console.error('Failed to create :', err);

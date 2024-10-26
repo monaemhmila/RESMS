@@ -43,7 +43,6 @@ const MultiLeadModel = (props) => {
             // setSelectedValues([])
         }
         catch (e) {
-            console.log(e)
         }
         finally {
             setIsLoding(false)

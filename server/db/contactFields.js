@@ -1,22 +1,6 @@
+const { addPropertyInterest } = require("../controllers/contact/contact");
+
 const contactFields = [
-    {
-        "name": "fullName",
-        "label": "Full Name",
-        "type": "text",
-        "fixed": true,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "String",
-        "editable": false,
-        "isTableField": true,
-        "options": [],
-        "validation": [
-            {
-                "require": true,
-                "message": "Full Name is required.",
-            },
-        ],
-    },
     {
         "name": "firstName",
         "label": "First Name",
@@ -84,14 +68,15 @@ const contactFields = [
         "name": "phoneNumber",
         "label": "Phone Number",
         "type": "tel",
-        "fixed": false,
+        "fixed": true,
         "delete": false,
         "belongsTo": null,
         "backendType": "Number",
         "isTableField": true,
+        "options":[],
         "validation": [
             {
-                "require": false,
+                "require": true,
                 "message": "",
             },
         ],
@@ -187,6 +172,20 @@ const contactFields = [
         "belongsTo": null,
         "backendType": "String",
         "isTableField": true,
+        "options": [
+            {
+                "name": "active",
+                "value": "active",
+            },
+            {
+                "name": "pending",
+                "value": "pending",
+            },
+            {
+                "name": "sold",
+                "value": "sold",
+            }
+        ],
         "validation": [],
     },
     {
@@ -211,30 +210,7 @@ const contactFields = [
         "isTableField": true,
         "validation": [],
     },
-    {
-        "name": "interestProperty",
-        "label": "Properties of Interest",
-        "type": "multi-select",
-        "fixed": false,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "ObjectId",
-        "isTableField": true,
-        "options": [], // Populate this with property options from your database
-        "validation": [],
-    },
-    {
-        "name": "quotes",
-        "label": "Quotes",
-        "type": "multi-select",
-        "fixed": false,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "ObjectId",
-        "isTableField": true,
-        "options": [], // Populate this with quote options from your database
-        "validation": [],
-    },
+  
     {
         "name": "notesandComments",
         "label": "Notes and Comments",
@@ -368,62 +344,66 @@ const contactFields = [
     },
     {
         "name": "linkedInProfile",
-        "label": "LinkedIn Profile",
-        "type": "text",
-        "fixed": false,
+        "label": "LinkedIn Profile URL",
+        "type": "url",
+        "fixed": true,
         "delete": false,
         "belongsTo": null,
-        "backendType": "String",
-        "isTableField": true,
+        "backendType": "Mixed",
+        "isTableField": false,
         "validation": [
             {
-                "require": false,
-                "message": "LinkedIn profile URL should be valid.",
-            },
-        ],
+                "message": "Invalid type value for LinkedIn Profile URL",
+                "formikType": "url",
+            }
+         ],
     },
     {
         "name": "facebookProfile",
         "label": "Facebook Profile",
-        "type": "text",
-        "fixed": false,
+        "type": "url",
+        "fixed": true,
         "delete": false,
         "belongsTo": null,
-        "backendType": "String",
-        "isTableField": true,
+        "backendType": "Mixed",
+        "isTableField": false,
         "validation": [
             {
-                "require": false,
-                "message": "Facebook profile URL should be valid.",
-            },
+                "formikType": "url",
+                "message": "Invalid type value for facebook",            },
         ],
     },
     {
         "name": "twitterHandle",
-        "label": "Twitter Handle",
-        "type": "text",
-        "fixed": false,
+        "label": "Twitter Username",
+        "type": "url",
+        "fixed": true,
         "delete": false,
         "belongsTo": null,
-        "backendType": "String",
-        "isTableField": true,
+        "backendType": "Mixed",
+        "isTableField": false,
         "validation": [
             {
-                "require": false,
-                "message": "Twitter handle should be valid.",
-            },
+             "message": "Invalid type value for Twitter Username",
+             "formikType": "url",
+            }
         ],
-    },
+   },
     {
         "name": "otherProfiles",
-        "label": "Other Profiles",
-        "type": "text",
-        "fixed": false,
+        "label": "Other Social Media Profiles URL",
+        "type": "url",
+        "fixed": true,
         "delete": false,
         "belongsTo": null,
-        "backendType": "String",
-        "isTableField": true,
-        "validation": [],
+        "backendType": "Mixed",
+        "isTableField": false,
+        "validation": [
+            {
+                "message": "Invalid type value for Other Social Media Profiles URL",
+                "formikType": "url",
+            }
+        ],
     },
     {
         "name": "agentOrTeamMember",
