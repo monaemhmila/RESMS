@@ -16,9 +16,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import ExcelJS from 'exceljs';
 import Card from 'components/card/Card';
-
 function LeadImport() {
-
     const location = useLocation();
     const { fileData, customFields } = location.state || {};
     const [importedFileFields, setImportedFileFields] = useState([]);
@@ -28,25 +26,28 @@ function LeadImport() {
     const [filterLead, setFilterLead] = useState([]);
 
     const columns = [
-        { Header: 'Fields In Crm', accessor: 'crmFields' },
+        { Header: 'Fields In CRM', accessor: 'crmFields' },
         { Header: 'Fields In File', accessor: 'fileFields' },
     ];
 
     const initialFieldValues = Object.fromEntries(
         (customFields || []).map(field => [field?.name, ''])
     );
-    const initialValues = {
-        ...initialFieldValues
-    };
+    const initialValues = { ...initialFieldValues };
 
     const fieldsInCrm = [
-        ...customFields?.map((field) => ({ Header: field?.label, accessor: field?.name, type: field?.type, formikType: field?.validations?.find(obj => obj.hasOwnProperty('formikType')) }))
+        ...customFields?.map((field) => ({
+            Header: field?.label,
+            accessor: field?.name,
+            type: field?.type,
+            formikType: field?.validations?.find(obj => obj.hasOwnProperty('formikType'))
+        }))
     ];
 
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values, { resetForm }) => {
-
+            console.log('Form submitted with values:', values);
             const leadsData = importedFileData?.map((item, ind) => {
                 const lead = {
                     createdDate: new Date(),
@@ -57,6 +58,8 @@ function LeadImport() {
                 fieldsInCrm?.forEach(field => {
                     const selectedField = values[field?.accessor];
                     const fieldValue = item[selectedField] || '';
+
+                    console.log(`Processing field: ${field.accessor}, type: ${field.type}, value: ${fieldValue}`);
 
                     if (field?.type?.toLowerCase() === "date") {
                         lead[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
@@ -74,41 +77,45 @@ function LeadImport() {
 
             AddData(leadsData);
         }
-    })
+    });
 
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+    const { errors, touched, values, handleBlur, handleSubmit, setFieldValue, resetForm } = formik;
 
     const AddData = async (leads) => {
         try {
+            console.log('Starting AddData function with leads:', leads);
             setIsLoding(true);
-            let response = await postApi('api/lead/addMany', leads)
+            let response = await postApi('api/lead/addMany', leads);
+            console.log('Response from API:', response);
+
             if (response.status === 200) {
-                toast.success(`Leads imported successfully`)
-                resetForm();
+                toast.success(`Leads imported successfully`);
+                formik.resetForm();
                 navigate('/lead');
             }
         } catch (e) {
-            console.error(e);
-            toast.error(`Leads import failed`)
-            resetForm();
+            console.error('Error in AddData:', e);
+            toast.error(`Leads import failed`);
+            formik.resetForm();
             navigate('/lead');
-        }
-        finally {
-            setIsLoding(false)
+        } finally {
+            setIsLoding(false);
         }
     };
 
     const parseFileData = async (file) => {
+        console.log('Parsing file:', file.name);
         const reader = new FileReader();
         const extension = file.name.split('.').pop().toLowerCase();
 
         reader.onload = async ({ target }) => {
+            console.log('File loaded with extension:', extension);
 
             if (extension === 'csv') {
-                const csv = Papa.parse(target.result, {
-                    header: true,
-                });
+                const csv = Papa.parse(target.result, { header: true });
                 const parsedData = csv?.data;
+
+                console.log('Parsed CSV data:', parsedData);
 
                 if (parsedData && parsedData.length > 0) {
                     setImportedFileData(parsedData);
@@ -122,13 +129,11 @@ function LeadImport() {
             } else if (extension === 'xlsx') {
                 const data = new Uint8Array(target.result);
                 const workbook = new ExcelJS.Workbook();
-
                 await workbook.xlsx.load(data);
 
                 const worksheet = workbook.getWorksheet(1);
                 const jsonData = [];
 
-                // Iterate over rows and cells
                 worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
                     const rowData = {};
                     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
@@ -136,8 +141,11 @@ function LeadImport() {
                     });
                     jsonData.push(rowData);
                 });
+
                 jsonData?.splice(0, 1);
                 setImportedFileData(jsonData);
+
+                console.log('Parsed XLSX data:', jsonData);
 
                 if (jsonData && jsonData.length > 0) {
                     const fileHeadingFields = Object.keys(jsonData[0]);
@@ -159,12 +167,14 @@ function LeadImport() {
 
     useEffect(() => {
         if (fileData && fileData.length > 0) {
+            console.log('File data available. Parsing first file.');
             const firstFile = fileData[0];
             parseFileData(firstFile);
         }
     }, [fileData]);
 
     useEffect(() => {
+        console.log('Setting initial values for imported fields:', importedFileFields);
         const filterLeadData = importedFileFields?.filter(field => {
             const result = fieldsInCrm?.find(data => field === data?.accessor || field === data?.Header);
             if (result) {
@@ -174,8 +184,9 @@ function LeadImport() {
             return false;
         });
         setFilterLead(filterLeadData);
+        console.log('Filtered leads:', filterLeadData);
     }, [importedFileFields]);
-
+    
     return (
         <>
             <Card overflowY={"auto"} className="importTable">
@@ -201,14 +212,15 @@ function LeadImport() {
                                     {item.Header}
                                 </GridItem>
                                 <GridItem colSpan={{ base: 4 }}>
-                                    <Select
-                                        variant="flushed"
-                                        fontWeight='500'
-                                        isSearchable
-                                        value={values[item.accessor]}
-                                        name={item.accessor}
-                                        onChange={handleChange}
-                                    >
+                                <Select
+    variant="flushed"
+    fontWeight="500"
+    isSearchable
+    value={values[item.accessor]}
+    name={item.accessor}
+    onChange={(e) => setFieldValue(item.accessor, e.target.value)} // Replaces handleChange with formik's setFieldValue
+>
+
                                         <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
                                         {
                                             importedFileFields?.map(field => (

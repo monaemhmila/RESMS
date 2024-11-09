@@ -3,8 +3,11 @@ const property = require('./property');
 const auth = require('../../middelwares/auth');
 
 const router = express.Router();
-
-router.get('/', auth, property.index)
+const resetQueryMiddleware = (req, res, next) => {
+    req.query = {}; // Reset query parameters
+    next(); // Proceed to the next middleware or route handler
+};
+router.get('/', auth, resetQueryMiddleware, property.propertyIndex);
 router.post('/add', auth, property.add)
 router.post('/addMany', auth, property.addMany)
 router.get('/view/:id', auth, property.view)

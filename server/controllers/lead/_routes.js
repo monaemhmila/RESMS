@@ -3,8 +3,11 @@ const lead = require('./lead');
 const auth = require('../../middelwares/auth');
 
 const router = express.Router();
-
-router.get('/', auth, lead.index)
+const resetQueryMiddleware = (req, res, next) => {
+    req.query = {}; // Reset query parameters
+    next(); // Proceed to the next middleware or route handler
+};
+router.get('/', auth, resetQueryMiddleware, lead.leadIndex);
 router.post('/add', auth, lead.add)
 router.post('/addMany', auth, lead.addMany)
 router.get('/view/:id', auth, lead.view)

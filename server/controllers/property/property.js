@@ -4,19 +4,26 @@ const fs = require('fs');
 const path = require('path');
 const { Contact } = require('../../model/schema/contact');
 
+// For Properties
+const propertyIndex = async (req, res, next) => {
+    const propertyQuery = { ...req.query, deleted: false };
 
-const index = async (req, res) => {
-    const query = req.query
-    query.deleted = false;
-    // let result = await Property.find(query)
-    let allData = await Property.find(query).populate({
-        path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
+    try {
+        let allData = await Property.find(propertyQuery).populate({
+            path: 'createBy',
+            match: { deleted: false }
+        }).exec();
 
-    const result = allData.filter(item => item.createBy !== null);
-    res.send(result)
-}
+        const result = allData.filter(item => item.createBy !== null);
+        res.send(result);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+    req.query = {}; // Reset query parameters
+    next();
+};
+
+
 
 const add = async (req, res) => {
     try {
@@ -292,4 +299,4 @@ const PropertyDocuments = async (req, res) => {
 
 
 
-module.exports = { index, add, addMany, view, edit, deleteData, deleteMany, upload, propertyPhoto, virtualTours, VirtualToursorVideos, FloorPlansStorage, FloorPlans, PropertyDocumentsStorage, PropertyDocuments }
+module.exports = { propertyIndex, add, addMany, view, edit, deleteData, deleteMany, upload, propertyPhoto, virtualTours, VirtualToursorVideos, FloorPlansStorage, FloorPlans, PropertyDocumentsStorage, PropertyDocuments }

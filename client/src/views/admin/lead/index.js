@@ -128,33 +128,30 @@ const Index = () => {
                 return "completed";
         }
     };
-
     const fetchCustomDataFields = async () => {
-        setIsLoding(true);
-
+    
+    
         try {
             const result = await dispatch(fetchLeadCustomFiled());
             if (result.payload.status === 200) {
-                setLeadData(result?.payload?.data);
+                setLeadData(result?.payload?.data || []);
             } else {
                 toast.error("Failed to fetch data", "error");
+                setLeadData([]); // Set to empty array on failure
             }
-
+    
             const actionHeader = {
                 Header: "Action",
                 accessor: "action",
                 isSortable: false,
                 center: true,
-                cell: ({ row, i }) => (
+                cell: ({ row }) => (
                     <Text fontSize="md" fontWeight="900" textAlign={"center"}>
                         <Menu isLazy>
                             <MenuButton>
                                 <CiMenuKebab />
                             </MenuButton>
-                            <MenuList
-                                minW={"fit-content"}
-                                transform={"translate(1520px, 173px);"}
-                            >
+                            <MenuList minW={"fit-content"} transform={"translate(1520px, 173px);"}>
                                 {permission?.update && (
                                     <MenuItem
                                         py={2.5}
@@ -191,7 +188,7 @@ const Index = () => {
                                         }}
                                         icon={<EmailIcon fontSize={15} mb={1} />}
                                     >
-                                        EmailSend{" "}
+                                        EmailSend
                                     </MenuItem>
                                 )}
                                 {permission?.view && (
@@ -201,7 +198,7 @@ const Index = () => {
                                         icon={<ViewIcon mb={1} fontSize={15} />}
                                         onClick={() => {
                                             navigate(`/leadView/${row?.values?._id}`, {
-                                                state: { leadList: data },
+                                                state: { leadId: row?.values?._id },
                                             });
                                         }}
                                     >
@@ -226,6 +223,8 @@ const Index = () => {
                     </Text>
                 ),
             };
+    
+            // Ensure result.payload.data is an array before processing
             const tempTableColumns = [
                 { Header: "#", accessor: "_id", isSortable: false, width: 10 },
                 {
@@ -251,53 +250,52 @@ const Index = () => {
                         </div>
                     ),
                 },
-                ...(result?.payload?.data && result.payload.data.length > 0
+                ...(Array.isArray(result?.payload?.data) && result.payload.data.length > 0
                     ? result.payload.data[0]?.fields
                         ?.filter((field) => field?.isTableField === true && field?.isView)
-                        ?.map(
-                            (field) =>
-                                field?.name !== "leadStatus" && {
-                                    Header: field?.label,
-                                    accessor: field?.name,
-                                    cell: (cell) => (
-                                        <div className="selectOpt">
-                                            <Text
-                                                onClick={() => {
-                                                    navigate(`/leadView/${cell?.row?.original?._id}`);
-                                                }}
-                                                me="10px"
-                                                sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-                                                color='brand.600'
-                                                fontSize="sm"
-                                                fontWeight="700"
-                                            >
-                                                {cell?.value || "-"}
-                                            </Text>
-                                        </div>
-                                    ),
-                                }
+                        ?.map((field) =>
+                            field?.name !== "leadStatus" ? {
+                                Header: field?.label,
+                                accessor: field?.name,
+                                cell: (cell) => (
+                                    <div className="selectOpt">
+                                        <Text
+                                            onClick={() => {
+                                                navigate(`/leadView/${cell?.row?.original?._id}`);
+                                            }}
+                                            me="10px"
+                                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                                            color='brand.600'
+                                            fontSize="sm"
+                                            fontWeight="700"
+                                        >
+                                            {cell?.value || "-"}
+                                        </Text>
+                                    </div>
+                                ),
+                            } : null
                         ) || []
                     : []),
-                ...(result?.payload?.data && result.payload.data.length > 0
+                ...(Array.isArray(result?.payload?.data) && result.payload.data.length > 0
                     ? result.payload.data[0]?.fields?.filter((field) => field?.isTableField === true && !field?.isView && field?.name !== "leadStatus")
                         ?.map((field) => ({
                             Header: field?.label,
                             accessor: field?.name,
-                        })
-                        ) || []
+                        })) || []
                     : []),
                 ...(permission?.update || permission?.view || permission?.delete
                     ? [actionHeader]
                     : []),
             ];
-
+    
             setColumns(tempTableColumns);
-            setIsLoding(false);
         } catch (error) {
             console.error("Error fetching custom data fields:", error);
-            toast.error("Failed to fetch data ", "error");
+            toast.error("Failed to fetch data", "error");
+            
         }
     };
+    
 
     const handleDeleteLead = async (ids) => {
         try {

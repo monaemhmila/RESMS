@@ -5,20 +5,26 @@ const Task = require('../../model/schema/task')
 const MeetingHistory = require('../../model/schema/meeting')
 const DocumentSchema = require('../../model/schema/document')
 
-const index = async (req, res) => {
-    const query = req.query
-    query.deleted = false;
 
-    // let result = await Lead.find(query)
+// For Leads
+const leadIndex = async (req, res, next) => {
+    req.query = {}; // Reset query parameters
+    const leadQuery = { ...req.query, deleted: false };
 
-    let allData = await Lead.find(query).populate({
-        path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
+    try {
+        let allData = await Lead.find(leadQuery).populate({
+            path: 'createBy',
+            match: { deleted: false }
+        }).exec();
 
-    const result = allData.filter(item => item.createBy !== null);
-    res.send(result)
-}
+        const result = allData.filter(item => item.createBy !== null);
+        res.send(result);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+    next(); // Proceed to the next middleware or route handler
+
+};
 
 const addMany = async (req, res) => {
     try {
@@ -284,4 +290,4 @@ const deleteMany = async (req, res) => {
 }
 
 
-module.exports = { index, add, addMany, view, edit, deleteData, deleteMany, changeStatus }
+module.exports = { leadIndex, add, addMany, view, edit, deleteData, deleteMany, changeStatus }
