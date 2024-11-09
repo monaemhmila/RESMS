@@ -54,7 +54,6 @@ const Index = () => {
     ]);
     const [isLoding, setIsLoding] = useState(false);
     const [searchDisplay, setSearchDisplay] = useState(false);
-    // const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -88,7 +87,6 @@ const Index = () => {
                 ? "api/lead/"
                 : `api/lead/?createBy=${user._id}`
         );
-        // setData(result?.data);
         setIsLoding(false);
     };
 
@@ -128,18 +126,18 @@ const Index = () => {
                 return "completed";
         }
     };
+
     const fetchCustomDataFields = async () => {
-    
-    
+        setIsLoding(true);
+
         try {
             const result = await dispatch(fetchLeadCustomFiled());
             if (result.payload.status === 200) {
-                setLeadData(result?.payload?.data || []);
+                setLeadData(result?.payload?.data);
             } else {
                 toast.error("Failed to fetch data", "error");
-                setLeadData([]); // Set to empty array on failure
             }
-    
+
             const actionHeader = {
                 Header: "Action",
                 accessor: "action",
@@ -223,8 +221,6 @@ const Index = () => {
                     </Text>
                 ),
             };
-    
-            // Ensure result.payload.data is an array before processing
             const tempTableColumns = [
                 { Header: "#", accessor: "_id", isSortable: false, width: 10 },
                 {
@@ -291,11 +287,10 @@ const Index = () => {
             setColumns(tempTableColumns);
         } catch (error) {
             console.error("Error fetching custom data fields:", error);
-            toast.error("Failed to fetch data", "error");
-            
+            toast.error("Failed to fetch data ", "error");
         }
     };
-    
+
 
     const handleDeleteLead = async (ids) => {
         try {
@@ -317,32 +312,12 @@ const Index = () => {
         if (window.location.pathname === "/lead") {
             dispatch(fetchLeadData());
         }
+        fetchData();
         fetchCustomDataFields();
-    }, [action]);
-
-    useEffect(() => {
-        setDataColumn(
-            tableColumns?.filter((item) =>
-                selectedColumns?.find((colum) => colum?.Header === item.Header)
-            )
-        );
-    }, [tableColumns, selectedColumns]);
-
-    useEffect(() => {
-        if (location?.state) {
-            setSearchDisplay(true);
-            dispatch(
-                getSearchData({ values: payload, allData: data, type: "Leads" })
-            );
-            const getValue = [
-                {
-                    name: ["leadStatus"],
-                    value: location?.state,
-                },
-            ];
-            dispatch(setGetTagValues(getValue.filter((item) => item.value)));
-        }
-    }, [data, location?.state]);
+        return () => {
+            setLeadData([]); // Clean up the state on unmount
+        };
+    }, []);
 
     return (
         <div>
