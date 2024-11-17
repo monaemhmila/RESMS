@@ -37,6 +37,6 @@ const server = app.listen(port, () => {
 
 // Connect to MongoDB
 const DATABASE_URL = process.env.DB_URL || 'mongodb+srv://hamilamonem:ccavhKglmUrq6kd7@cluster0.2u6rt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-const DATABASE = process.env.DB || 'Hello'
+const DATABASE = process.env.DB || 'keller'
 
 db(DATABASE_URL, DATABASE);
