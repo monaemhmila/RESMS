@@ -52,7 +52,10 @@ function SignIn() {
 
   const [show, setShow] = React.useState(false);
   const showPass = () => setShow(!show);
-
+  const defaultValues = {
+    username: 'admin@gmail.com',
+    password: 'admin123'
+  };
   const initialValues = {
     username: "",
     password: "",
@@ -158,7 +161,7 @@ function SignIn() {
                 name="username"
                 ms={{ base: "0px", md: "0px" }}
                 type="email"
-                placeholder="mail@simmmple.com"
+                placeholder="mail@mail.com"
                 mb={errors.username && touched.username ? undefined : "24px"}
                 fontWeight="500"
                 size="lg"
