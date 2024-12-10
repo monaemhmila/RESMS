@@ -148,7 +148,7 @@ function SignIn() {
                 color={textColor}
                 mb="8px"
               >
-                Email<Text color={brandStars}>*</Text>
+                Email<Text color={brandStars}>*(example:admin@gmail.com)</Text>
               </FormLabel>
               <Input
                 fontSize="sm"
@@ -188,7 +188,7 @@ function SignIn() {
                 color={textColor}
                 display="flex"
               >
-                Password<Text color={brandStars}>*</Text>
+                Password<Text color={brandStars}>*(admin123)</Text>
               </FormLabel>
               <InputGroup size="md">
                 <Input
