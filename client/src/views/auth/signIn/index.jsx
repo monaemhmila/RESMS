@@ -148,7 +148,7 @@ function SignIn() {
                 color={textColor}
                 mb="8px"
               >
-                Email<Text color={brandStars}>*(example:admin@gmail.com)</Text>
+                Email<Text color={brandStars}>*(admin@gmail.com)</Text>
               </FormLabel>
               <Input
                 fontSize="sm"
