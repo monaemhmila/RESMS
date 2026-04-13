@@ -10,12 +10,8 @@ const ApexChart = (props) => {
 
   const series = [activeLength, pendingLength, soldLength];
   const scaledSeries = series?.map(value => {
-    if (leadData?.length === 0) {
-        return NaN;
-    } else {
-        return value === 0 ? NaN : ((value * 100) / leadData?.length);
-    }
-});
+    return (leadData?.length > 0) ? ((value * 100) / leadData?.length) : 0;
+  });
 
 
   const options = {
@@ -50,7 +46,7 @@ const ApexChart = (props) => {
           value: {
             show: true,
             formatter: function (val) {
-              return (val / 100 * leadData.length).toFixed(0);
+              return (val / 100 * (leadData?.length || 0)).toFixed(0);
             }
           }
         },

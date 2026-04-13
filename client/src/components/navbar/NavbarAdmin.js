@@ -28,8 +28,8 @@ export default function AdminNavbar(props) {
 	let navbarFilter = 'none';
 	let navbarBackdrop = 'blur(20px)';
 	let navbarShadow = 'none';
-	let navbarBg = useColorModeValue('#fff', 'rgba(11,20,55,0.5)');
-	let navbarBorder = 'transparent';
+	let navbarBg = useColorModeValue('rgba(255, 255, 255, 0.65)', 'rgba(11, 20, 55, 0.6)');
+	let navbarBorder = useColorModeValue("1px solid rgba(255, 255, 255, 0.4)", "1px solid rgba(255, 255, 255, 0.05)");
 	let secondaryMargin = '-9px';
 	let paddingX = '15px';
 	let gap = '0px';

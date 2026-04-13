@@ -347,28 +347,51 @@ const CommonCheckTable = (props) => {
                 direction="column"
                 w="100%"
                 overflowX={{ sm: "scroll", lg: "hidden" }}
+                borderRadius="16px"
+                boxShadow="0 4px 24px -8px rgba(66,42,251,0.10)"
+                border="1px solid"
+                borderColor="rgba(66,42,251,0.08)"
+                p={{ base: 3, md: 5 }}
             >
-                <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+                <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={3}>
                     <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
-                        <Flex alignItems={"center"} flexWrap={"wrap"}>
+                        <Flex alignItems={"center"} flexWrap={"wrap"} gap={2}>
                             {
                                 title &&
-                                <Text
-                                    color={'secondaryGray.900'}
-                                    fontSize="22px"
-                                    fontWeight="700"
-                                    lineHeight="100%"
-                                    textTransform={'capitalize'}
-                                >
-                                    {title} (<CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />)
-                                </Text>
+                                <Flex alignItems="baseline" gap={2}>
+                                    <Text
+                                        color={'secondaryGray.900'}
+                                        fontSize="20px"
+                                        fontWeight="800"
+                                        lineHeight="100%"
+                                        textTransform={'capitalize'}
+                                        letterSpacing="-0.3px"
+                                    >
+                                        {title}
+                                    </Text>
+                                    <Box
+                                        as="span"
+                                        bg="linear-gradient(135deg, #422AFB 0%, #7551FF 100%)"
+                                        color="white"
+                                        fontSize="11px"
+                                        fontWeight="700"
+                                        px={2}
+                                        py={0.5}
+                                        borderRadius="full"
+                                        minW="28px"
+                                        textAlign="center"
+                                        boxShadow="0 2px 8px -2px rgba(66,42,251,0.4)"
+                                    >
+                                        <CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />
+                                    </Box>
+                                </Flex>
                             }
                             {customSearch !== false && <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />}
                             {
                                 AdvanceSearch ? AdvanceSearch : AdvanceSearch !== false &&
-                                    <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+                                    <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)} borderRadius="8px">Advance Search</Button>
                             }
-                            {(searchDisplay || displaySearchData) ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
+                            {(searchDisplay || displaySearchData) ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()} borderRadius="8px">Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete && !deleteMany) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
                         </Flex>
                     </GridItem>
@@ -385,71 +408,105 @@ const CommonCheckTable = (props) => {
                         setSearchbox={setSearchbox}
                         handleAdvanceSearch={handleAdvanceSearch}
                     />
-                    <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+                    <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"} gap={2}>
                         {ManageGrid !== false &&
-                            <Menu isLazy  >
-                                <MenuButton p={4}>
-                                    <BsColumnsGap />
+                            <Menu isLazy>
+                                <MenuButton
+                                    as={Button}
+                                    size="sm"
+                                    variant="ghost"
+                                    colorScheme="gray"
+                                    borderRadius="8px"
+                                    _hover={{ bg: 'rgba(66,42,251,0.06)' }}
+                                    leftIcon={<BsColumnsGap />}
+                                >
+                                    Columns
                                 </MenuButton>
-                                <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2} >
-                                    <MenuItem onClick={() => setManageColumnsModel(true)} width={"165px"}> Manage Columns
+                                <MenuList minW={'fit-content'} zIndex={2} borderRadius="10px" boxShadow="0 8px 32px -8px rgba(0,0,0,0.18)" border="1px solid" borderColor="gray.100">
+                                    <MenuItem onClick={() => setManageColumnsModel(true)} width={"165px"} fontSize="sm"> Manage Columns
                                     </MenuItem>
-                                    {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)}> Import {title}
+                                    {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)} fontSize="sm"> Import {title}
                                     </MenuItem>}
                                     {
                                         allData && allData?.length > 0 &&
                                         <>
                                             <MenuDivider />
-                                            <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
-                                            <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
+                                            <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')} fontSize="sm">{selectedValues && selectedValues?.length > 0 ? 'Export Selected as CSV' : 'Export as CSV'}</MenuItem>
+                                            <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')} fontSize="sm">{selectedValues && selectedValues?.length > 0 ? 'Export Selected as Excel' : 'Export as Excel'}</MenuItem>
                                         </>
                                     }
                                 </MenuList>
                             </Menu>}
-                        {(access?.create || access === true) && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
+                        {(access?.create || access === true) && (
+                            <Button
+                                onClick={() => handleClick()}
+                                size="sm"
+                                variant="brand"
+                                leftIcon={<AddIcon />}
+                                borderRadius="8px"
+                                bgGradient="linear(to-r, #422AFB, #7551FF)"
+                                _hover={{ bgGradient: 'linear(to-r, #3311DB, #5a35ff)', transform: 'translateY(-1px)', boxShadow: '0 4px 16px -4px rgba(66,42,251,0.5)' }}
+                                transition="all 0.2s ease"
+                            >Add New</Button>
+                        )}
                         {BackButton && BackButton}
                     </GridItem>
-                    <HStack spacing={4} mb={2}>
-                        {(getTagValues || []).map((item) => (
-                            <Tag
-                                size={"md"}
-                                p={2}
-                                key={item.value}
-                                borderRadius='full'
-                                variant='solid'
-                                colorScheme="gray"
-                            >
-                                <TagLabel>{item.value}</TagLabel>
-                                <TagCloseButton onClick={() => handleRemoveFromTag(item)} />
-                            </Tag>
-                        ))}
-                    </HStack>
+                    {(getTagValues || []).length > 0 && (
+                        <GridItem colSpan={12}>
+                            <HStack spacing={2} flexWrap="wrap">
+                                {(getTagValues || []).map((item) => (
+                                    <Tag
+                                        size={"sm"}
+                                        px={3}
+                                        py={1.5}
+                                        key={item.value}
+                                        borderRadius='full'
+                                        bg="rgba(66,42,251,0.08)"
+                                        color="brand.600"
+                                        border="1px solid"
+                                        borderColor="rgba(66,42,251,0.2)"
+                                        fontWeight="600"
+                                        fontSize="11px"
+                                    >
+                                        <TagLabel>{item.value}</TagLabel>
+                                        <TagCloseButton onClick={() => handleRemoveFromTag(item)} />
+                                    </Tag>
+                                ))}
+                            </HStack>
+                        </GridItem>
+                    )}
                 </Grid>
-                <Box overflowY={"auto"} className={size ? `small-table-fix-container` : `table-fix-container`}>
-                    <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-                        <Thead zIndex={1}>
+                <Box overflowY={"auto"} className={size ? `small-table-fix-container` : `table-fix-container`} borderRadius="10px" border="1px solid" borderColor="gray.100">
+                    <Table {...getTableProps()} variant="simple" color="gray.500" mb="0">
+                        <Thead>
                             {headerGroups?.map((headerGroup, index) => (
                                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                                     {headerGroup.headers?.map((column, index) => (
                                         <Th
                                             {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
-                                            pe="10px"
                                             key={index}
-                                            borderColor={borderColor}
+                                            borderColor="transparent"
+                                            cursor={column.isSortable !== false ? 'pointer' : 'default'}
+                                            _hover={column.isSortable !== false ? { color: 'brand.500' } : {}}
+                                            transition="color 0.15s ease"
+                                            whiteSpace="nowrap"
                                         >
                                             <Flex
                                                 align="center"
                                                 justifyContent={column.center ? "center" : "start"}
-                                                fontSize={{ sm: "14px", lg: "16px" }}
-                                                color="secondaryGray.900"
+                                                gap={1.5}
                                             >
-                                                <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                                                <Box as="span" fontWeight="700" fontSize="11px" letterSpacing="0.7px" textTransform="uppercase" color={column.isSorted ? 'brand.500' : 'gray.500'}>
                                                     {column.render("Header")}
-                                                </span>
+                                                </Box>
                                                 {column.isSortable !== false && (
-                                                    <span>
-                                                        {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
-                                                    </span>
+                                                    <Box as="span" color={column.isSorted ? 'brand.500' : 'gray.300'} transition="color 0.15s ease">
+                                                        {column.isSorted
+                                                            ? (column.isSortedDesc
+                                                                ? <FaSortDown style={{ marginBottom: '-3px' }} />
+                                                                : <FaSortUp style={{ marginTop: '-3px' }} />)
+                                                            : <FaSort />}
+                                                    </Box>
                                                 )}
                                             </Flex>
                                         </Th>
@@ -458,23 +515,48 @@ const CommonCheckTable = (props) => {
                             ))}
                         </Thead>
                         <Tbody {...getTableBodyProps()}>
-                            {isLoding ?
+                            {isLoding ? (
+                                Array.from({ length: 6 }).map((_, i) => (
+                                    <Tr key={i}>
+                                        {Array.from({ length: columns?.length || 4 }).map((_, j) => (
+                                            <Td key={j} borderColor="transparent" py={4}>
+                                                <Box
+                                                    h="14px"
+                                                    borderRadius="6px"
+                                                    bg="linear-gradient(90deg, #f0f2ff 25%, #e6e9ff 50%, #f0f2ff 75%)"
+                                                    backgroundSize="200% 100%"
+                                                    sx={{
+                                                        animation: 'shimmer 1.4s infinite',
+                                                        '@keyframes shimmer': {
+                                                            '0%': { backgroundPosition: '200% 0' },
+                                                            '100%': { backgroundPosition: '-200% 0' },
+                                                        }
+                                                    }}
+                                                    opacity={1 - i * 0.12}
+                                                />
+                                            </Td>
+                                        ))}
+                                    </Tr>
+                                ))
+                            ) : (data && data?.length === 0) || data === undefined ? (
                                 <Tr>
-                                    <Td colSpan={columns?.length}>
-                                        <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                            <Spinner />
+                                    <Td colSpan={columns.length} borderColor="transparent" py={12}>
+                                        <Flex direction="column" alignItems="center" gap={3}>
+                                            <Box
+                                                w="64px" h="64px"
+                                                borderRadius="full"
+                                                bg="rgba(66,42,251,0.06)"
+                                                display="flex" alignItems="center" justifyContent="center"
+                                                fontSize="28px"
+                                            >
+                                                🔍
+                                            </Box>
+                                            <Text fontSize="sm" fontWeight="600" color="gray.500">No records found</Text>
+                                            <Text fontSize="xs" color="gray.400">Try adjusting your search or filters</Text>
                                         </Flex>
                                     </Td>
                                 </Tr>
-                                : data && data?.length === 0 || data === undefined ? (
-                                    <Tr>
-                                        <Td colSpan={columns.length}>
-                                            <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                <DataNotFound />
-                                            </Text>
-                                        </Td>
-                                    </Tr>
-                                ) : page?.map((row, i) => {
+                            ) : page?.map((row, i) => {
                                     prepareRow(row);
                                     return (
                                         <Tr {...row?.getRowProps()}>
@@ -484,10 +566,10 @@ const CommonCheckTable = (props) => {
                                                     if (cell?.column.Header === item.Header) {
                                                         if (item.cell && typeof item.cell === 'function') {
                                                             data = (
-                                                                <Flex Flex align="center" justifyContent={item?.Header === 'Action' && 'center'}>
-                                                                    <Text color={textColor} fontSize="sm" fontWeight="700" >
+                                                                <Flex align="center" justifyContent={item?.Header === 'Action' && 'center'}>
+                                                                    <Box color={textColor} fontSize="sm" fontWeight="700" >
                                                                         {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
-                                                                    </Text>
+                                                                    </Box>
                                                                 </Flex>
                                                             );
                                                         }
@@ -544,14 +626,14 @@ const CommonCheckTable = (props) => {
                         <ModalBody>
                             <div>
                                 {columnData?.map((column) => (
-                                    <Text display={"flex"} key={column?.accessor} py={2}>
+                                    <Box display={"flex"} alignItems={"center"} key={column?.accessor} py={2}>
                                         <Checkbox
                                             defaultChecked={columns?.some((item) => item?.accessor === column?.accessor)}
                                             onChange={() => toggleColumnVisibility(column?.accessor)}
                                             pe={2}
                                         />
                                         {column?.Header}
-                                    </Text>
+                                    </Box>
                                 ))}
                             </div>
                         </ModalBody>

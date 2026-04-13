@@ -49,18 +49,18 @@ const ReportChart = (props) => {
         }
     };
 
-    const series = Object.keys(reportChart).map((key) => {
-        const dataSet = reportChart[key][0];
+    const series = Object.keys(reportChart || {}).map((key) => {
+        const dataSet = reportChart?.[key]?.[0];
         let seriesData = [];
 
         if (dataSet?.Emails && isEmailsActive?.isActive) {
             seriesData = seriesData.concat(
-                dataSet?.Emails?.map((item) => ({ x: item?.date, y: item?.Emailcount }))
+                dataSet?.Emails?.map((item) => ({ x: item?.date, y: item?.Emailcount || 0 }))
             );
         }
         if (dataSet?.Calls && isCallsActive?.isActive) {
             seriesData = seriesData.concat(
-                dataSet?.Calls?.map((item) => ({ x: item?.date, y: item?.Callcount }))
+                dataSet?.Calls?.map((item) => ({ x: item?.date, y: item?.Callcount || 0 }))
             );
         }
 

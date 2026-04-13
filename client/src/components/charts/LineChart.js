@@ -11,7 +11,7 @@ const ApexChart = (props) => {
   data?.forEach(item => {
     if (item.name) {
       permissions.push(item.name);
-      permissionsLength.push(item.length);
+      permissionsLength.push(item.length || 0);
     }
   });
 

@@ -43,6 +43,11 @@ export default function HeaderLinks(props) {
 		"14px 17px 40px 4px rgba(112, 144, 176, 0.18)",
 		"14px 17px 40px 4px rgba(112, 144, 176, 0.06)"
 	);
+	const menuItemHoverBg = useColorModeValue("rgba(0, 0, 0, 0.04)", "rgba(255, 255, 255, 0.08)");
+	const menuItemHoverBgRed = useColorModeValue("rgba(254, 178, 178, 0.2)", "rgba(254, 178, 178, 0.1)");
+	const menuListBoxShadow = useColorModeValue("0px 20px 40px rgba(112, 144, 176, 0.2)", "0px 20px 40px rgba(11, 20, 55, 0.5)");
+	const menuListBg = useColorModeValue("rgba(255, 255, 255, 0.7)", "rgba(11, 20, 55, 0.7)");
+	const menuListBorder = useColorModeValue("1px solid rgba(255, 255, 255, 0.6)", "1px solid rgba(255, 255, 255, 0.1)");
 	// const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
 
 	// const [loginUser, setLoginUser] = useState();
@@ -230,12 +235,13 @@ export default function HeaderLinks(props) {
 					/>
 				</MenuButton>
 				<MenuList
-					boxShadow={shadow}
-					p="0px"
+					boxShadow={menuListBoxShadow}
+					p="12px"
 					mt="10px"
-					borderRadius="20px"
-					bg={menuBg}
-					border="none"
+					borderRadius="24px"
+					bg={menuListBg}
+					backdropFilter="blur(20px)"
+					border={menuListBorder}
 				>
 					<Flex w="100%" mb="0px">
 						<Text
@@ -256,10 +262,13 @@ export default function HeaderLinks(props) {
 
 					<Flex flexDirection="column" p="10px">
 						<MenuItem
-							_hover={{ bg: "none" }}
+							_hover={{ bg: menuItemHoverBg, transform: "scale(1.02)" }}
 							_focus={{ bg: "none" }}
-							borderRadius="8px"
+							borderRadius="14px"
 							px="14px"
+							py="10px"
+							transition="all 0.3s cubic-bezier(0.25, 1, 0.5, 1)"
+							mb="4px"
 						>
 							<Text fontSize="sm" onClick={() => navigate(`/admin/`)}>
 								Home
@@ -268,10 +277,13 @@ export default function HeaderLinks(props) {
 
 						{loginUser?.role === "superAdmin" &&
 							<MenuItem
-								_hover={{ bg: "none" }}
+								_hover={{ bg: menuItemHoverBg, transform: "scale(1.02)" }}
 								_focus={{ bg: "none" }}
-								borderRadius="8px"
+								borderRadius="14px"
 								px="14px"
+								py="10px"
+								transition="all 0.3s cubic-bezier(0.25, 1, 0.5, 1)"
+								mb="4px"
 							>
 								<Text
 									fontSize="sm"
@@ -283,10 +295,13 @@ export default function HeaderLinks(props) {
 								</Text>
 							</MenuItem>}
 						<MenuItem
-							_hover={{ bg: "none" }}
+							_hover={{ bg: menuItemHoverBg, transform: "scale(1.02)" }}
 							_focus={{ bg: "none" }}
-							borderRadius="8px"
+							borderRadius="14px"
 							px="14px"
+							py="10px"
+							transition="all 0.3s cubic-bezier(0.25, 1, 0.5, 1)"
+							mb="4px"
 						>
 							<Text
 								fontSize="sm"
@@ -303,12 +318,14 @@ export default function HeaderLinks(props) {
 							<Text fontSize="sm">Newsletter Settings</Text>
 						</MenuItem> */}
 						<MenuItem
-							_hover={{ bg: "none" }}
+							_hover={{ bg: menuItemHoverBgRed, transform: "scale(1.02)" }}
 							onClick={logOut}
 							_focus={{ bg: "none" }}
 							color="red.400"
-							borderRadius="8px"
+							borderRadius="14px"
 							px="14px"
+							py="10px"
+							transition="all 0.3s cubic-bezier(0.25, 1, 0.5, 1)"
 						>
 							<Text fontSize="sm">Log out</Text>
 						</MenuItem>

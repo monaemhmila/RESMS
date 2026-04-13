@@ -28,13 +28,15 @@ import { IoMenuOutline } from "react-icons/io5";
 function Sidebar(props) {
   const { routes, setOpenSidebar, openSidebar, largeLogo } = props;
 
-  let variantChange = "0.2s linear";
+  let variantChange = "all 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
   let shadow = useColorModeValue(
-    "14px 17px 40px 4px rgba(112, 144, 176, 0.08)",
-    "unset"
+    "14px 17px 40px 4px rgba(112, 144, 176, 0.15)",
+    "none"
   );
   // Chakra Color Mode
-  let sidebarBg = useColorModeValue("white", "navy.800");
+  let sidebarBg = useColorModeValue("rgba(255, 255, 255, 0.65)", "rgba(11, 20, 55, 0.65)");
+  let sidebarBackdrop = "blur(20px)";
+  let sidebarBorder = useColorModeValue("1px solid rgba(255, 255, 255, 0.4)", "1px solid rgba(255, 255, 255, 0.05)");
   let sidebarMargins = "0px";
   const { isOpen, onOpen, onClose } = useDisclosure();
   // SIDEBAR
@@ -42,6 +44,8 @@ function Sidebar(props) {
     <Box display={{ sm: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
       <Box
         bg={sidebarBg}
+        backdropFilter={sidebarBackdrop}
+        borderRight={sidebarBorder}
         transition={variantChange}
         // w='280px'
         w={openSidebar ? '280px' : "80px"}

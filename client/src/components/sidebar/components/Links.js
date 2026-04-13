@@ -29,145 +29,102 @@ export function SidebarLinks(props) {
 
   // this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
   const createLinks = (routes) => {
+    const activeBg = useColorModeValue("rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.15)");
+    const activeShadow = useColorModeValue("0px 8px 32px rgba(112, 144, 176, 0.15)", "none");
+    const activeHoverBg = useColorModeValue("rgba(255, 255, 255, 0.6)", "rgba(255, 255, 255, 0.25)");
+    const inactiveHoverBg = useColorModeValue("rgba(0, 0, 0, 0.04)", "rgba(255, 255, 255, 0.08)");
 
     return routes?.map((route, index) => {
+      const active = activeRoute(route.path.toLowerCase());
       if (route?.category) {
         return (
-          <>
+          <Box key={index}>
             <Text
-              fontSize={"md"}
+              fontSize={"xs"}
               color={activeColor}
-              fontWeight='bold'
+              fontWeight='800'
+              textTransform="uppercase"
+              letterSpacing="1px"
               mx='auto'
               ps={{
                 sm: "10px",
                 xl: "16px",
               }}
-              pt='18px'
-              pb='10px'
-              key={index}>
+              pt='24px'
+              pb='12px'
+            >
               {route?.name}
             </Text>
             {createLinks(route?.items)}
-          </>
+          </Box>
         );
       } else if (!route?.under && user?.role && route?.layout?.includes(`/${user?.role}`)) {
         return (
           <NavLink key={index} to={route.path}>
             {route?.separator &&
-              <Box position='relative'
-                margin='20px 0'
-              >
+              <Box position='relative' margin='20px 0'>
                 <Divider />
-                <AbsoluteCenter textTransform={'capitalize'} bg='white' width={'max-content'} padding='0 10px' textAlign={'center'}>
+                <AbsoluteCenter textTransform={'capitalize'} bg={useColorModeValue("white", "navy.900")} width={'max-content'} padding='0 10px' textAlign={'center'}>
                   {route?.separator}
                 </AbsoluteCenter>
               </Box>
             }
-            {
-              route.icon ? (
-                <Box backgroundColor={activeRoute(route.path.toLowerCase())
-                  ? sidebarBgColor
-                  : ""}
-                  ps={"25px"} pb={"6px"} pt={"10px"}>
-
-                  <HStack
-                    spacing={activeRoute(route.path.toLowerCase()) ? "22px" : "26px"}
-                    py='5px'
+            <Box
+              mx="10px"
+              borderRadius="16px"
+              transition="all 0.4s cubic-bezier(0.25, 1, 0.5, 1)"
+              bg={active ? activeBg : "transparent"}
+              boxShadow={active ? activeShadow : "none"}
+              backdropFilter={active ? "blur(10px)" : "none"}
+              border={active ? useColorModeValue("1px solid rgba(255, 255, 255, 0.5)", "1px solid rgba(255, 255, 255, 0.1)") : "1px solid transparent"}
+              _hover={{
+                bg: active ? activeHoverBg : inactiveHoverBg,
+                transform: "translateX(5px) scale(1.02)",
+                boxShadow: useColorModeValue("0px 8px 32px rgba(112, 144, 176, 0.15)", "none")
+              }}
+            >
+              <HStack
+                spacing="20px"
+                py='12px'
+                ps='15px'
+              >
+                <Flex w='100%' alignItems='center' justifyContent='start'>
+                  <Box
+                    color={active ? activeIcon : textColor}
+                    me='12px'
                   >
-                    {openSidebar === true ?
-                      <Flex w='100%' alignItems='center' justifyContent='center'
-                      // onClick={() => setOpenSidebar(!openSidebar)}
-                      >
-                        <Box
-                          color={
-                            activeRoute(route.path.toLowerCase())
-                              ? activeIcon
-                              : textColor
-                          }
-                          me='18px' >
-                          {route.icon}
-                        </Box>
-                        <Text
-                          me='auto'
-                          pb={"3px"}
-                          textOverflow={"ellipsis"}
-                          textTransform={'capitalize'}
-                          overflowX="hidden"
-                          whiteSpace='nowrap'
-                          width="190px"
-                          color={
-                            activeRoute(route.path.toLowerCase())
-                              ? activeColor
-                              : textColor
-                          }
-                          fontWeight={
-                            activeRoute(route.path.toLowerCase())
-                              ? "bold"
-                              : "normal"
-                          }>
-                          <Tooltip hasArrow label={route.name}>
-                            {route.name}
-                          </Tooltip>
-                        </Text>
-                      </Flex>
-                      :
-                      <Flex w='100%' alignItems='center' justifyContent='center'
-                      //  onClick={() => setOpenSidebar(!openSidebar)}
-                      >
-                        <Box
-                          color={
-                            activeRoute(route.path.toLowerCase())
-                              ? activeIcon
-                              : textColor
-                          }
-                          me='18px' >
-                          {route.icon}
-                        </Box>
-                      </Flex>}
-                    <Box
-                      // h='36px'
-                      w='4px'
-                      bg={
-                        activeRoute(route.path.toLowerCase())
-                          ? brandColor
-                          : brandColor
-                      }
-                      borderRadius='5px'
-                    />
-                  </HStack>
-                </Box>
-              ) : (
-                <Box>
-                  <HStack
-                    spacing={
-                      activeRoute(route.path.toLowerCase()) ? "22px" : "26px"
-                    }
-                    py='5px'
-                    ps='10px'>
+                    {route.icon}
+                  </Box>
+                  {openSidebar && (
                     <Text
                       me='auto'
-                      color={
-                        activeRoute(route.path.toLowerCase())
-                          ? activeColor
-                          : inactiveColor
-                      }
-                      fontWeight={
-                        activeRoute(route.path.toLowerCase()) ? "bold" : "normal"
-                      }>
-                      {route.name}
+                      color={active ? activeColor : textColor}
+                      fontWeight={active ? "700" : "500"}
+                      fontSize="sm"
+                    >
+                      <Tooltip hasArrow label={route.name}>
+                        {route.name}
+                      </Tooltip>
                     </Text>
-                    <Box h='36px' w='4px' bg='brand.400' borderRadius='5px' />
-                  </HStack>
-                </Box>
-              )
-            }
+                  )}
+                </Flex>
+                {active && (
+                  <Box
+                    w='4px'
+                    h='20px'
+                    bg={brandColor}
+                    borderRadius='5px'
+                    me="-10px"
+                  />
+                )}
+              </HStack>
+            </Box>
           </NavLink>
         );
       }
-
     });
   };
+
   //  BRAND
   return createLinks(routes);
 }

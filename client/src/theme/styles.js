@@ -93,15 +93,36 @@ export const globalStyles = {
       body: {
         overflowX: "hidden",
         bg: mode("secondaryGray.300", "navy.900")(props),
-        fontFamily: "Inter,sans-serif",
+        fontFamily: "'Inter', sans-serif",
         letterSpacing: "-0.5px",
+        transition: "all 0.3s ease-in-out",
+        _before: {
+          content: '""',
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: -1,
+          background: mode(
+            "radial-gradient(circle at 50% -20%, #E9E3FF 0%, transparent 40%)",
+            "radial-gradient(circle at 50% -20%, #1b3bbb 0%, transparent 40%)"
+          )(props),
+          pointerEvents: "none",
+        }
       },
       input: {
         color: "gray.700",
       },
       html: {
-        fontFamily: "Inter,sans-serif",
+        fontFamily: "'Inter', sans-serif",
+        scrollBehavior: "smooth",
       },
+      ".glass": {
+        backdropFilter: "blur(12px) saturate(180%)",
+        backgroundColor: mode("rgba(255, 255, 255, 0.7)", "rgba(11, 20, 55, 0.7)")(props),
+        border: "1px solid rgba(255, 255, 255, 0.125)",
+      }
     }),
   },
 };

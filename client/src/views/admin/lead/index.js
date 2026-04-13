@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
 import {
+    Box,
     Grid,
     GridItem,
     Text,
@@ -30,10 +31,7 @@ import ImportModal from "./components/ImportModal";
 import { putApi } from "services/api";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteManyApi } from "services/api";
-import {
-    getSearchData,
-    setGetTagValues,
-} from "../../../redux/slices/advanceSearchSlice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLeadData } from "../../../redux/slices/leadSlice";
 import { fetchLeadCustomFiled } from "../../../redux/slices/leadCustomFiledSlice";
@@ -54,10 +52,8 @@ const Index = () => {
     ]);
     const [isLoding, setIsLoding] = useState(false);
     const [searchDisplay, setSearchDisplay] = useState(false);
-    const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
-    const [dataColumn, setDataColumn] = useState([]);
-    const [selectedColumns, setSelectedColumns] = useState([]);
+
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [leadData, setLeadData] = useState([]);
@@ -76,13 +72,10 @@ const Index = () => {
     const searchedDataOut = useSelector(
         (state) => state?.advanceSearchData?.searchResult
     );
-    const payload = {
-        leadStatus: location?.state,
-    };
 
     const fetchData = async () => {
         setIsLoding(true);
-        let result = await getApi(
+        await getApi(
             user.role === "superAdmin"
                 ? "api/lead/"
                 : `api/lead/?createBy=${user._id}`
@@ -144,7 +137,7 @@ const Index = () => {
                 isSortable: false,
                 center: true,
                 cell: ({ row }) => (
-                    <Text fontSize="md" fontWeight="900" textAlign={"center"}>
+                    <Box fontSize="md" fontWeight="900" textAlign={"center"} display="flex" justifyContent="center">
                         <Menu isLazy>
                             <MenuButton>
                                 <CiMenuKebab />
@@ -218,7 +211,7 @@ const Index = () => {
                                 )}
                             </MenuList>
                         </Menu>
-                    </Text>
+                    </Box>
                 ),
             };
             const tempTableColumns = [
@@ -231,7 +224,6 @@ const Index = () => {
                     cell: ({ row }) => (
                         <div className="selectOpt">
                             <Select
-                                defaultValue={"active"}
                                 className={changeStatus(row)}
                                 onChange={(e) => setStatusData(row, e)}
                                 height={7}
@@ -317,6 +309,7 @@ const Index = () => {
         return () => {
             setLeadData([]); // Clean up the state on unmount
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
