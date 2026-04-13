@@ -12,7 +12,13 @@ import {
     MenuList,
     useDisclosure,
     Select,
+    Portal,
+    Flex,
+    IconButton,
+    ButtonGroup,
 } from "@chakra-ui/react";
+import LeadKanban from "./components/LeadKanban";
+import { BsListUl, BsKanban } from "react-icons/bs";
 import {
     DeleteIcon,
     ViewIcon,
@@ -55,6 +61,7 @@ const Index = () => {
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [leadData, setLeadData] = useState([]);
+    const [viewMode, setViewMode] = useState("table");
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
@@ -134,7 +141,8 @@ const Index = () => {
                             <MenuButton>
                                 <CiMenuKebab />
                             </MenuButton>
-                            <MenuList minW={"fit-content"} transform={"translate(1520px, 173px);"}>
+                            <Portal>
+                                <MenuList minW={"fit-content"} zIndex={1001}>
                                 {permission?.update && (
                                     <MenuItem
                                         py={2.5}
@@ -202,6 +210,7 @@ const Index = () => {
                                     </MenuItem>
                                 )}
                             </MenuList>
+                            </Portal>
                         </Menu>
                     </Box>
                 ),
@@ -272,6 +281,8 @@ const Index = () => {
         } catch (error) {
             console.error("Error fetching custom data fields:", error);
             toast.error("Failed to fetch data ", "error");
+        } finally {
+            setIsLoding(false);
         }
     };
 
@@ -299,13 +310,20 @@ const Index = () => {
             setLeadData([]); // Clean up the state on unmount
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [action]);
 
     return (
         <div>
+            <Flex justify="flex-end" mb={4}>
+                <ButtonGroup isAttached variant="outline">
+                    <IconButton icon={<BsListUl />} isActive={viewMode === "table"} onClick={() => setViewMode("table")} aria-label="Table View" />
+                    <IconButton icon={<BsKanban />} isActive={viewMode === "kanban"} onClick={() => setViewMode("kanban")} aria-label="Kanban View" />
+                </ButtonGroup>
+            </Flex>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
                 {!isLoding && (
                     <GridItem colSpan={6}>
+                        {viewMode === "table" ? (
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
@@ -333,6 +351,9 @@ const Index = () => {
                             setDelete={setDelete}
                             setIsImport={setIsImport}
                         />
+                        ) : (
+                            <LeadKanban data={data} fetchData={fetchData} />
+                        )}
                     </GridItem>
                 )}
             </Grid>

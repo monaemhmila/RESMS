@@ -64,7 +64,10 @@ const CommonCheckTable = (props) => {
     const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
     const searchValue = useSelector((state) => state?.advanceSearchData?.searchValue)
     const getTagValues = useSelector((state) => state?.advanceSearchData?.getTagValues)
-    const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : allData, [searchDisplay, displaySearchData, AdvanceSearch, searchedDataOut, searchedData, allData]);
+    const data = useMemo(() => {
+        const result = (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : allData;
+        return Array.isArray(result) ? result : [];
+    }, [searchDisplay, displaySearchData, AdvanceSearch, searchedDataOut, searchedData, allData]);
 
     // Pre-compute O(1) column lookup map by Header name — avoids forEach per cell
     const columnMap = useMemo(() => {
