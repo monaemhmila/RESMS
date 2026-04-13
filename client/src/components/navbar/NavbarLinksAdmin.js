@@ -240,7 +240,6 @@ export default function HeaderLinks(props) {
 					mt="10px"
 					borderRadius="24px"
 					bg={menuListBg}
-					backdropFilter="blur(20px)"
 					border={menuListBorder}
 				>
 					<Flex w="100%" mb="0px">

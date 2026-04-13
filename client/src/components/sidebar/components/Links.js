@@ -75,7 +75,6 @@ export function SidebarLinks(props) {
               transition="all 0.4s cubic-bezier(0.25, 1, 0.5, 1)"
               bg={active ? activeBg : "transparent"}
               boxShadow={active ? activeShadow : "none"}
-              backdropFilter={active ? "blur(10px)" : "none"}
               border={active ? useColorModeValue("1px solid rgba(255, 255, 255, 0.5)", "1px solid rgba(255, 255, 255, 0.1)") : "1px solid transparent"}
               _hover={{
                 bg: active ? activeHoverBg : inactiveHoverBg,

@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, Button, HStack, Tag, TagLabel, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Grid, GridItem, Checkbox, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, TagCloseButton } from '@chakra-ui/react';
 import { useColorModeValue } from '@chakra-ui/system';
 import { BsColumnsGap } from "react-icons/bs";
@@ -65,6 +65,13 @@ const CommonCheckTable = (props) => {
     const searchValue = useSelector((state) => state?.advanceSearchData?.searchValue)
     const getTagValues = useSelector((state) => state?.advanceSearchData?.getTagValues)
     const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : allData, [searchDisplay, displaySearchData, AdvanceSearch, searchedDataOut, searchedData, allData]);
+
+    // Pre-compute O(1) column lookup map by Header name — avoids forEach per cell
+    const columnMap = useMemo(() => {
+        const map = {};
+        (columnData || []).forEach(col => { map[col.Header] = col; });
+        return map;
+    }, [columnData]);
 
     const [manageColumnsModel, setManageColumnsModel] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
@@ -561,41 +568,38 @@ const CommonCheckTable = (props) => {
                                     return (
                                         <Tr {...row?.getRowProps()}>
                                             {row?.cells?.map((cell, index) => {
+                                                // O(1) lookup instead of O(n) forEach per cell
+                                                const item = columnMap[cell?.column.Header];
                                                 let data = "";
-                                                columnData?.forEach((item) => {
-                                                    if (cell?.column.Header === item.Header) {
-                                                        if (item.cell && typeof item.cell === 'function') {
-                                                            data = (
-                                                                <Flex align="center" justifyContent={item?.Header === 'Action' && 'center'}>
-                                                                    <Box color={textColor} fontSize="sm" fontWeight="700" >
-                                                                        {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
-                                                                    </Box>
-                                                                </Flex>
-                                                            );
-                                                        }
-                                                        else {
-                                                            data = (
-                                                                <Flex align="center" >
-                                                                    {item.Header ===
-                                                                        "#" &&
-                                                                        (checkBox || checkBox === undefined) && (
-                                                                            <Checkbox
-                                                                                colorScheme="brandScheme"
-                                                                                value={selectedValues}
-                                                                                isChecked={selectedValues?.includes(cell?.value)}
-                                                                                onChange={(event) => handleCheckboxChange(event, cell?.value)}
-                                                                                me="10px"
-                                                                            />
-                                                                        )}
-
-                                                                    <Text color={textColor} fontSize="sm" fontWeight="700">
-                                                                        {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
-                                                                    </Text>
-                                                                </Flex>
-                                                            );
-                                                        }
+                                                if (item) {
+                                                    if (item.cell && typeof item.cell === 'function') {
+                                                        data = (
+                                                            <Flex align="center" justifyContent={item?.Header === 'Action' && 'center'}>
+                                                                <Box color={textColor} fontSize="sm" fontWeight="700">
+                                                                    {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
+                                                                </Box>
+                                                            </Flex>
+                                                        );
+                                                    } else {
+                                                        data = (
+                                                            <Flex align="center">
+                                                                {item.Header === "#" &&
+                                                                    (checkBox || checkBox === undefined) && (
+                                                                        <Checkbox
+                                                                            colorScheme="brandScheme"
+                                                                            value={selectedValues}
+                                                                            isChecked={selectedValues?.includes(cell?.value)}
+                                                                            onChange={(event) => handleCheckboxChange(event, cell?.value)}
+                                                                            me="10px"
+                                                                        />
+                                                                    )}
+                                                                <Text color={textColor} fontSize="sm" fontWeight="700">
+                                                                    {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
+                                                                </Text>
+                                                            </Flex>
+                                                        );
                                                     }
-                                                });
+                                                }
                                                 return (
                                                     <Td
                                                         {...cell?.getCellProps()}

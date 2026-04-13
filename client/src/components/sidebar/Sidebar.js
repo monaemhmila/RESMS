@@ -44,7 +44,6 @@ function Sidebar(props) {
     <Box display={{ sm: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
       <Box
         bg={sidebarBg}
-        backdropFilter={sidebarBackdrop}
         borderRight={sidebarBorder}
         transition={variantChange}
         // w='280px'

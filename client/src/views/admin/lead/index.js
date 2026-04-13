@@ -21,16 +21,14 @@ import {
     PhoneIcon,
 } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
-import { getApi } from "services/api";
+import { putApi, deleteManyApi } from "services/api";
 import CommonCheckTable from "../../../components/reactTable/checktable";
 import Add from "./Add";
 import Edit from "./Edit";
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import ImportModal from "./components/ImportModal";
-import { putApi } from "services/api";
 import CommonDeleteModel from "components/commonDeleteModel";
-import { deleteManyApi } from "services/api";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLeadData } from "../../../redux/slices/leadSlice";
@@ -73,14 +71,8 @@ const Index = () => {
         (state) => state?.advanceSearchData?.searchResult
     );
 
-    const fetchData = async () => {
-        setIsLoding(true);
-        await getApi(
-            user.role === "superAdmin"
-                ? "api/lead/"
-                : `api/lead/?createBy=${user._id}`
-        );
-        setIsLoding(false);
+    const fetchData = () => {
+        dispatch(fetchLeadData());
     };
 
     const handleOpenEmail = (id, dataLead) => {
@@ -301,10 +293,7 @@ const Index = () => {
     };
 
     useEffect(() => {
-        if (window.location.pathname === "/lead") {
-            dispatch(fetchLeadData());
-        }
-        fetchData();
+        dispatch(fetchLeadData());
         fetchCustomDataFields();
         return () => {
             setLeadData([]); // Clean up the state on unmount

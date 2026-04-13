@@ -7,7 +7,6 @@ import AdminLayout from 'layouts/admin';
 import UserLayout from 'layouts/user';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from 'theme/theme';
-import { ThemeEditorProvider } from '@hypertheme-editor/chakra-ui';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
@@ -43,11 +42,9 @@ ReactDOM.render(
 		<PersistGate loading={null} persistor={persistor}>
 			<ChakraProvider theme={theme}>
 				<React.StrictMode>
-					<ThemeEditorProvider>
 						<Router>
 							<App />
 						</Router>
-					</ThemeEditorProvider>
 				</React.StrictMode>
 			</ChakraProvider>
 		</PersistGate>
